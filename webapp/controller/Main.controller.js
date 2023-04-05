@@ -1,23 +1,12 @@
 sap.ui.define([
     "sap/ui/core/mvc/Controller",
-    "sap/ui/model/odata/v2/ODataModel",
-    "sap/ui/model/json/JSONModel",
-    'sap/ui/model/Sorter',
-    "sap/ui/model/Filter",
-    "sap/ui/model/FilterOperator",
-    "sap/ui/core/format/DateFormat",
-    "sap/ui/core/IconPool",
-    "sap/m/Label",
-    "sap/m/library",
-    "sap/m/MessageToast",
-    "sap/m/Text",
-    "sap/m/Dialog",
-    "sap/ui/core/Fragment"
+    "sap/ui/model/Filter"
+
 ],
     /**
      * @param {typeof sap.ui.core.mvc.Controller} Controller
      */
-    function (Controller, Sorter, MessageToast) {
+    function (Controller,Filter) {
         "use strict";
         var orden = 0;
         return Controller.extend("project6.controller.Main", {
@@ -26,90 +15,74 @@ sap.ui.define([
                 var oModel = this.getOwnerComponent().getModel("nData");
                 oModel.read("/Invoices", {
                     success: function (oData, oResponse) {
-
-                        const unicos = [];
+                        var valoresUnicos = [];
+                        const Comprobante = [];
                         oData.results.forEach(element => {//Preparacion del array seguramente se pueda hacer en una llamada revisar luego
                             const elemento = element.ShipName;
-                            if (!unicos.includes(element.ShipName)) {
-                                unicos.push(elemento);
+                            if (!Comprobante.includes(element.ShipName)) {
+                                Comprobante.push(elemento);//para comprobar los valores
+                                valoresUnicos.push({ Nombre: elemento });//array con los valores unicos
                             }
                         });
-                        var valores2 = [];
-                        for (var i = 0; i < unicos.length; i++) {// Si lo guardo con Nombre para identificarlo en el otro no me deja compararlo
-                            const elemento2 = unicos[i];
-                            valores2.push({ Nombre: elemento2 });
-                        }
+
                         var Modelo = new sap.ui.model.json.JSONModel();
-                        Modelo.setData(valores2);
-                        this.getView().setModel(Modelo, "pacoModel");
+                        Modelo.setData(valoresUnicos);
+                        this.getView().setModel(Modelo, "Invoices");
                     }.bind(this)
                 });
-                this.getView().byId("helloDialogButton").setEnabled(false);
+                this.getView().byId("fragmentDialog").setEnabled(false);
 
             },
 
             onListSelect: function (oEvent) {
                 var fModel = this.getOwnerComponent().getModel("nData");
-                this.getView().byId("helloDialogButton").setEnabled(true);
-
+                this.getView().byId("fragmentDialog").setEnabled(true);
                 fModel.read("/Orders", {
                     success: function (oData) {
                         var model = oData.results;
                         var selectedItem = this.getView().byId("Nombres").getSelectedItem().getText();
-                        var array = [];
                         const filtrados = [];
+                        var datosTabla = [];
 
                         model.forEach(element => {
                             const elemento = element.ShipName;
                             if (elemento === selectedItem) {
                                 filtrados.push({ Nombre: element.EmployeeID });
+                                let text = element.OrderID.toString();//cojo el ultimo valor para comprobar si es impar
+                                text.slice(-1);
+                                var valor = parseInt(text);
+                                const date2 = new Date(element.OrderDate);
+
+
+                                if (valor % 2 == 0) {
+                                    datosTabla.push({
+                                        ShipName: element.ShipName,
+                                        CustomerID: element.CustomerID,
+                                        OrderId: element.OrderID,
+                                        EmployeeID: element.EmployeeID,
+                                        OrderDate: date2.toLocaleDateString(),
+                                        Impar: "sap-icon://decline"
+                                    });
+                                } else {
+                                    datosTabla.push({
+                                        ShipName: element.ShipName,
+                                        CustomerID: element.CustomerID,
+                                        OrderId: element.OrderID,
+                                        EmployeeID: element.EmployeeID,
+                                        OrderDate: date2.toLocaleDateString(),
+                                        Impar: "sap-icon://accept"
+
+                                    });
+                                }
                             }
+
                         });
-    
-                        var Modelo = new sap.ui.model.json.JSONModel();// Modelo de los otros tontos
+                        var Modelo = new sap.ui.model.json.JSONModel();
                         Modelo.setData(filtrados);
                         this.getView().setModel(Modelo, "filtrados");
-
-                        var arrayO = [];
-                        const filtradosO = [];
-
-                        model.forEach(element => {
-                            let text = element.OrderID.toString();
-                            text.slice(-1);
-                            var valor = parseInt(text);
-                            if (valor % 2 == 0) {
-                                arrayO.push({
-                                    ShipName: element.ShipName,
-                                    CustomerID: element.CustomerID,
-                                    OrderId: element.OrderID,
-                                    EmployeeID: element.EmployeeID,
-                                    OrderDate: element.OrderDate,
-                                    Impar: "sap-icon://decline"
-                                });
-                            } else {
-                                arrayO.push({
-                                    ShipName: element.ShipName,
-                                    CustomerID: element.CustomerID,
-                                    OrderId: element.OrderID,
-                                    EmployeeID: element.EmployeeID,
-                                    OrderDate: element.OrderDate,
-                                    Impar: "sap-icon://accept"
-
-                                });
-                            }
-                        });
-                        for (var i = 0; i < arrayO.length; i++) {
-                            const elemento3 = Date.parse(arrayO[i].OrderDate);
-                            const date2 = new Date(elemento3);
-
-                            const elemento = arrayO[i].ShipName;
-                            if (elemento === selectedItem) {
-                                filtradosO.push({ OrderId: arrayO[i].OrderId, CustomerID: arrayO[i].CustomerID, EmployeeID: arrayO[i].EmployeeID, OrderDate: date2.toLocaleDateString(), Impar: arrayO[i].Impar });
-                            }
-                        }
-                        var Modelo = new sap.ui.model.json.JSONModel();
-                        Modelo.setData(filtradosO);
-                        this.getView().setModel(Modelo, "Tabla");
+                        var Modelo2 = new sap.ui.model.json.JSONModel();
+                        Modelo2.setData(datosTabla);
+                        this.getView().setModel(Modelo2, "Tabla");
 
                     }.bind(this)
                 });
@@ -117,31 +90,13 @@ sap.ui.define([
 
             },
 
-            onCreateTable: function (oEvent) {
-                var fModel = this.getOwnerComponent().getModel("nData");
-                fModel.read("/Orders", {
-                    success: function (oData, oResponse) {
-
-                        var dataR = oData.results;
-                        var selectedItem2 = this.getView().byId("filtrados").getSelectedItem().getText();
-                        var selectedItem = this.getView().byId("Nombres").getSelectedItem().getText();
-
-                        const filtrados = [];
-
-                        dataR.forEach(element => {
-                            const elemento3 = Date.parse(element.OrderDate);
-                            const date2 = new Date(elemento3);
-                            const elemento2 = element.EmployeeID;
-                            if (elemento2 == selectedItem2 && selectedItem === element.ShipName) {
-                                filtrados.push({ OrderId: element.OrderId, CustomerID: element.CustomerID, EmployeeID: element.EmployeeID, OrderDate: date2.toLocaleDateString() });
-                            }
-                        });
-                        var Modelo = new sap.ui.model.json.JSONModel();
-                        Modelo.setData(filtrados);
-                        this.getView().setModel(Modelo, "Tabla");
-
-                    }.bind(this)
-                });
+            onFilterId: function (oEvent) {
+                var oView = this.getView();
+                var oTable = oView.byId("table");
+                var oBinding = oTable.getBinding("items");
+                var selectedItem2 = this.getView().byId("filtrados").getSelectedItem().getText();
+                var oFilters = [ new sap.ui.model.Filter("EmployeeID",sap.ui.model.FilterOperator.EQ, selectedItem2) ];
+                oBinding.filter(oFilters);
 
             },
 
@@ -160,7 +115,7 @@ sap.ui.define([
 
             },
 
-            displayTable: function (oEvent) {// coNTROL DE FECHA
+            displayDateTable: function (oEvent) {// coNTROL DE FECHA
                 var fModel = this.getOwnerComponent().getModel("nData");
 
                 var leaveSince = this.getView().byId("leaveSince").getValue();
@@ -170,8 +125,7 @@ sap.ui.define([
                         const filtrados = [];
                         const date = new Date(leaveSince);
                         datos.forEach(element => {
-                            const elemento2 = Date.parse(element.OrderDate);
-                            const date2 = new Date(elemento2);
+                            const date2 = new Date(element.OrderDate);
                             if (date.toDateString() === date2.toDateString()) {
                                 filtrados.push({
                                     ShipName: element.ShipName,
@@ -193,7 +147,7 @@ sap.ui.define([
             onOpenDialog: function () {
                 if (!this.pDialog) {
                     this.pDialog = this.loadFragment({
-                        name: "AGAIN.project6.view.modal"
+                        name: "AGAIN.project6.fragments.modal"
                     });
                 }
                 this.pDialog.then(function (oDialog) {
@@ -204,10 +158,6 @@ sap.ui.define([
                 // note: We don't need to chain to the pDialog promise, since this event-handler
                 // is only called from within the loaded dialog itself.
                 this.byId("Sort").close();
-            },
-
-            _errorWhileDataLoading: function (oEvent) {
-                console.log("Error handling");
             }
         });
 

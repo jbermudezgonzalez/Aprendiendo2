@@ -4,21 +4,25 @@ xmlns:t="sap.m.template"
 xmlns:l="sap.ui.layout"
 xmlns:u="sap.ui.unified"
  xmlns:core="sap.ui.core" 
- displayBlock="true" 
- xmlns="sap.m" xmlns:ta="sap.ui.table">
+ xmlns="sap.m" 
+ xmlns:ta="sap.ui.table"  displayBlock="true" 
+>
     <Page title="Page has binding with a single product">
         <content>
-            <Select id="Nombres" items="{pacoModel>/}" change="onListSelect" >
-                <core:Item key="{pacoModel>Nombre}" text="{pacoModel>Nombre}" />
+            <Select id="Nombres" items="{Invoices>/}" change="onListSelect" >
+                <core:Item key="{Invoices>Nombre}" text="{Invoices>Nombre}" />
             </Select>
-             <Select  id="filtrados" items="{filtrados>/}" change="onCreateTable" >
+             <Select  id="filtrados" items="{filtrados>/}" change="onFilterId" >
                 <core:Item key="{filtrados>Nombre}" text="{filtrados>Nombre}" />
             </Select>
-            <DatePicker id="leaveSince"  class="leaveSinceInput" change="displayTable"/>
+            <DatePicker id="leaveSince"  class="leaveSinceInput" change="displayDateTable" displayFormat="MM dd, yyyy HH:mm a"/>
 
-
+            <OverflowToolbar style="Clear">
+				<Title id="title" text="Products"/>
+				<Button  id="fragmentDialog"  icon="sap-icon://sort"  press=".onOpenDialog"  class="sapUiSmallMarginEnd"/>
+			</OverflowToolbar>
             <Table  id="table" items="{Tabla>/}">
-
+	      
                	<columns>
 					<Column width="11rem">
 						<Label text="OrderId" />
@@ -35,18 +39,16 @@ xmlns:u="sap.ui.unified"
                      <Column width="11rem">
 						<Label text="Impar" />
                     </Column>
-                    <Column width="11rem"  id="BOTON"	>
-                        <Button  id="helloDialogButton"  icon="sap-icon://sort"  press=".onOpenDialog"  class="sapUiSmallMarginEnd"/>
-                    </Column>
+
                 </columns>
                 <items>
                     <ColumnListItem vAlign="Middle">
                         <cells>
-                                <Text key="{Tabla>OrderId}" text="{Tabla>OrderId}" />
+                                <Text text="{Tabla>OrderId}" />
                                 <Text text="{Tabla>CustomerID}" />
                                 <Text text="{Tabla>EmployeeID}" />
-                                <Text key="{Tabla>OrderDate}"  text="{Tabla>OrderDate}" />
-                                <ObjectStatus icon="{Tabla>Impar}" />
+                                <Text  text="{Tabla>OrderDate}"/>
+                                <ObjectStatus icon="{Tabla>Impar}"   />
                         </cells>
                     </ColumnListItem>
                 </items>   
