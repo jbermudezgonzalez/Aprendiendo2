@@ -16,20 +16,11 @@
             "toolsId": "bd529c86-8905-4e63-a259-146768bcfc3f"
         },
         "dataSources": {
-            "mainService": {
-                "uri": "v2/northwind/northwind.svc/",
-                "type": "OData",
-                "settings": {
-                    "annotations": [],
-                    "localUri": "localService/metadata.xml",
-                    "odataVersion": "2.0"
-                }
-            },
             "V2NorthwindNorthwind.svc": {
                 "uri": "V2/Northwind/Northwind.svc/",
                 "type": "OData",
                 "settings": {
-                    "localUri": "localService/V2/Northwind/Northwind.svc//metadata.xml"
+                    "odataVersion": "2.0"
                 }
             }
         }
@@ -75,11 +66,6 @@
                 "settings": {
                     "bundleName": "AGAIN.project6.i18n.i18n"
                 }
-            },
-            "": {
-                "dataSource": "mainService",
-                "preload": true,
-                "settings": {}
             },
             "nData": {
                 "dataSource": "V2NorthwindNorthwind.svc",

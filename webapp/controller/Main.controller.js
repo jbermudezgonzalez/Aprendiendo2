@@ -6,7 +6,7 @@ sap.ui.define([
     /**
      * @param {typeof sap.ui.core.mvc.Controller} Controller
      */
-    function (Controller,Filter) {
+    function (Controller, Filter) {
         "use strict";
         var orden = 0;
         return Controller.extend("project6.controller.Main", {
@@ -28,7 +28,9 @@ sap.ui.define([
                         var Modelo = new sap.ui.model.json.JSONModel();
                         Modelo.setData(valoresUnicos);
                         this.getView().setModel(Modelo, "Invoices");
-                    }.bind(this)
+                    }.bind(this), error: function () {
+                        console.log("Error");// Mensaje sencillo para marcar que da error en el console log
+                    }
                 });
                 this.getView().byId("fragmentDialog").setEnabled(false);
 
@@ -51,9 +53,7 @@ sap.ui.define([
                                 let text = element.OrderID.toString();//cojo el ultimo valor para comprobar si es impar
                                 text.slice(-1);
                                 var valor = parseInt(text);
-                                const date2 = new Date(element.OrderDate);
-
-
+                                const date2 = new Date(element.OrderDate);// controlo desde el backlend la fecha 
                                 if (valor % 2 == 0) {
                                     datosTabla.push({
                                         ShipName: element.ShipName,
@@ -84,7 +84,9 @@ sap.ui.define([
                         Modelo2.setData(datosTabla);
                         this.getView().setModel(Modelo2, "Tabla");
 
-                    }.bind(this)
+                    }.bind(this), error: function () {
+                        console.error("Mira el error en el debugger")
+                    }
                 });
 
 
@@ -95,7 +97,7 @@ sap.ui.define([
                 var oTable = oView.byId("table");
                 var oBinding = oTable.getBinding("items");
                 var selectedItem2 = this.getView().byId("filtrados").getSelectedItem().getText();
-                var oFilters = [ new sap.ui.model.Filter("EmployeeID",sap.ui.model.FilterOperator.EQ, selectedItem2) ];
+                var oFilters = [new sap.ui.model.Filter("EmployeeID", sap.ui.model.FilterOperator.EQ, selectedItem2)];
                 oBinding.filter(oFilters);
 
             },
@@ -140,7 +142,9 @@ sap.ui.define([
                         Modelo.setData(filtrados);
                         this.getView().setModel(Modelo, "Tabla");
 
-                    }.bind(this)
+                    }.bind(this),error: function () {
+                        console.log("Error");// Mensaje sencillo para marcar que da error en el console log
+                    }
                 });
 
             },
