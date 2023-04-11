@@ -6,7 +6,7 @@ xmlns:u="sap.ui.unified"
  xmlns:core="sap.ui.core" 
  xmlns="sap.m" 
  xmlns:ta="sap.ui.table"  displayBlock="true" >
-    <Page title="Page has binding with a single product">
+    <Page title="Pagina de busquedas">
         <content>
             <Select id="Nombres" items="{InvoicesShipName>/}" change="onListSelect" >
                 <core:Item key="{InvoicesShipName>Nombre}" text="{InvoicesShipName>Nombre}" />
