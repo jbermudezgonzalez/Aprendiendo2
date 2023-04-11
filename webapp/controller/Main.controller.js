@@ -32,7 +32,7 @@ sap.ui.define([
 
                         var Modelo = new sap.ui.model.json.JSONModel();
                         Modelo.setData(valoresUnicos);
-                        this.getView().setModel(Modelo, "Invoices");
+                        this.getView().setModel(Modelo, "InvoicesShipName");
                     }.bind(this), error: function () {
                         console.log("Error");// Mensaje sencillo para marcar que da error en el console log
                     }
@@ -58,14 +58,13 @@ sap.ui.define([
                                 let text = element.OrderID.toString();//cojo el ultimo valor para comprobar si es impar
                                 text.slice(-1);
                                 var valor = parseInt(text);
-                                const date2 = new Date(element.OrderDate);// controlo desde el backlend la fecha 
                                 if (valor % 2 == 0) {
                                     datosTabla.push({
                                         ShipName: element.ShipName,
                                         CustomerID: element.CustomerID,
                                         OrderId: element.OrderID,
                                         EmployeeID: element.EmployeeID,
-                                        OrderDate: date2.toLocaleDateString(),
+                                        OrderDate: element.OrderDate,
                                         Impar: "sap-icon://decline"
                                     });
                                 } else {
@@ -74,7 +73,7 @@ sap.ui.define([
                                         CustomerID: element.CustomerID,
                                         OrderId: element.OrderID,
                                         EmployeeID: element.EmployeeID,
-                                        OrderDate: date2.toLocaleDateString(),
+                                        OrderDate: element.OrderDate,
                                         Impar: "sap-icon://accept"
 
                                     });
@@ -139,7 +138,7 @@ sap.ui.define([
                                     CustomerID: element.CustomerID,
                                     OrderId: element.OrderID,
                                     EmployeeID: element.EmployeeID,
-                                    OrderDate: date2.toLocaleDateString()
+                                    OrderDate: element.OrderDate
                                 });
                             }
                         });
