@@ -1,12 +1,10 @@
 sap.ui.define([
-    "sap/ui/core/mvc/Controller",
-    "sap/ui/model/Filter"
-
+    "sap/ui/core/mvc/Controller"
 ],
     /**
      * @param {typeof sap.ui.core.mvc.Controller} Controller
      */
-    function (Controller, Filter) {
+    function (Controller) {
         "use strict";
         var orden = 0;
         return Controller.extend("project6.controller.Main", {
@@ -142,7 +140,7 @@ sap.ui.define([
                         Modelo.setData(filtrados);
                         this.getView().setModel(Modelo, "Tabla");
 
-                    }.bind(this),error: function () {
+                    }.bind(this), error: function () {
                         console.log("Error");// Mensaje sencillo para marcar que da error en el console log
                     }
                 });

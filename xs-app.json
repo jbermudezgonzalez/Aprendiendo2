@@ -4,7 +4,7 @@
   "routes": [
     {
       "source": "^/V2/(.*)$",
-      "destination": "northwind",
+      "destination": "orthwind",
       "authenticationType": "none",
       "csrfProtection": false
     },
