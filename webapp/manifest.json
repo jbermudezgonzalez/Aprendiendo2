@@ -67,11 +67,7 @@
                     "bundleName": "AGAIN.project6.i18n.i18n"
                 }
             },
-            "": {
-                "dataSource": "mainService",
-                "preload": true,
-                "settings": {}
-            },
+            
             "nData": {
                 "dataSource": "V2NorthwindNorthwind.svc",
                 "preload": true,

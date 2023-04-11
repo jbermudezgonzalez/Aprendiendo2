@@ -1,5 +1,6 @@
 sap.ui.define([
     "sap/ui/core/mvc/Controller"
+
 ],
     /**
      * @param {typeof sap.ui.core.mvc.Controller} Controller
@@ -14,14 +15,20 @@ sap.ui.define([
                 oModel.read("/Invoices", {
                     success: function (oData, oResponse) {
                         var valoresUnicos = [];
-                        const Comprobante = [];
+                        var Comprobante=1;
                         oData.results.forEach(element => {//Preparacion del array seguramente se pueda hacer en una llamada revisar luego
-                            const elemento = element.ShipName;
-                            if (!Comprobante.includes(element.ShipName)) {
-                                Comprobante.push(elemento);//para comprobar los valores
-                                valoresUnicos.push({ Nombre: elemento });//array con los valores unicos
+                            for (var i = 0; i < valoresUnicos.length; i++) {
+                                if (valoresUnicos[i].Nombre === element.ShipName) {
+                                    Comprobante = 0;
+                                } else {
+                                    Comprobante = 1;
+                                }
+                            }
+                            if (Comprobante === 1) {
+                                valoresUnicos.push({ Nombre: element.ShipName });//array con los valores unicos
                             }
                         });
+
 
                         var Modelo = new sap.ui.model.json.JSONModel();
                         Modelo.setData(valoresUnicos);
